@@ -27,48 +27,37 @@ class KoinContext(val beanRegistry: BeanRegistry, val propertyResolver: Property
     /**
      * Retrieve a bean instance
      */
-    inline fun <reified T: Any> get(name: String = ""): T = if (name.isEmpty()) resolveByClass() else resolveByName(name)
-
-    /**
-     * Resolve a dependency for its bean definition
-     * @param name bean definition name
-     */
-    inline fun <reified T: Any> resolveByName(name: String): T = resolveInstance(T::class) { beanRegistry.searchByName(name) }
-
-    /**
-     * Resolve a dependency for its bean definition
-     * byt Its infered type
-     */
-    inline fun <reified T: Any> resolveByClass(): T = resolveInstance(T::class) { beanRegistry.searchAll(T::class) }
-
+    inline fun <reified T: Any> get(name: String? = null): T = resolveInstance(T::class, name)
 
     /**
      * Resolve a dependency for its bean definition
      */
-    fun <T: Any> resolveInstance(clazz: KClass<*>, resolver: () -> BeanDefinition<*>): T {
-        logger.log("[Context] Resolve [${clazz.java.canonicalName}]")
+    fun <T: Any> resolveInstance(type: KClass<*>, name: String?): T {
+        logger.log("[Context] Resolve [${type.java.canonicalName}]")
 
-        if (resolutionStack.contains(clazz)) {
-            logger.err("[Context] Cyclic dependency detected while resolving $clazz")
-            throw DependencyResolutionException("Cyclic dependency for $clazz")
+        if (resolutionStack.contains(type)) {
+            logger.err("[Context] Cyclic dependency detected while resolving $type")
+            throw DependencyResolutionException("Cyclic dependency for $type")
         }
 
-        if (!beanRegistry.isVisible(clazz, resolutionStack.toList())) {
-            logger.err("[Context] Try to resolve $clazz but is not visible from classes context : $resolutionStack")
-            throw DependencyResolutionException("Try to resolve $clazz but is not visible from classes context : $resolutionStack")
+        if (!beanRegistry.isVisible(type, resolutionStack.toList())) {
+            logger.err("[Context] Try to resolve $type but is not visible from classes context : $resolutionStack")
+            throw DependencyResolutionException("Try to resolve $type but is not visible from classes context : $resolutionStack")
         }
 
-        resolutionStack.add(clazz)
+        resolutionStack.add(type)
 
-        val beanDefinition: BeanDefinition<*> = resolver()
-
+        val beanDefinition = if(name != null && name.isNotEmpty())
+            beanRegistry.searchByName(name)
+        else
+            beanRegistry.searchAll(type)
         val instance: T = instanceFactory[beanDefinition]
 
         val head = resolutionStack.pop()
-        if (head != clazz) {
+        if (head != type) {
             logger.err("[Context] Call stack error -- $resolutionStack")
             resolutionStack.clear()
-            throw IllegalStateException("Calling HEAD was $head but should be $clazz")
+            throw IllegalStateException("Calling HEAD was $head but should be $type")
         }
         return instance
     }
