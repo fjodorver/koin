@@ -54,14 +54,9 @@ class Context(val name: String = Scope.ROOT, val koinContext: KoinContext) {
 
     /**
      * Resolve a component
-     */
-    inline fun <reified T : Any> get(): T = koinContext.get()
-
-    /**
-     * Resolve a component
      * @param name : component name
      */
-    inline fun <reified T : Any> get(name: String): T = koinContext.get(name)
+    inline fun <reified T : Any> get(name: String? = null): T = koinContext.get(name)
 
     /**
      * Retrieve a property
