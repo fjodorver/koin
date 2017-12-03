@@ -14,7 +14,7 @@ internal fun context() = (StandAloneContext.koinContext as KoinContext)
  * @param definitionCount - number of definitions
  */
 fun KoinTest.assertDefinitions(definitionCount: Int) {
-    Assert.assertEquals("applicationContext must have $definitionCount definition", definitionCount, context().AllDefinitions().size)
+    Assert.assertEquals("applicationContext must have $definitionCount definition", definitionCount, context().allDefinitions().size)
 }
 
 /**
@@ -34,7 +34,7 @@ fun KoinTest.assertDefinedInScope(definitionClazz: KClass<*>, scopeName: String)
  */
 fun KoinTest.assertContextInstances(scopeName: String, instanceCount: Int) {
     val scope = context().getScope(scopeName)
-    val definitions = context().AllDefinitions().filter { it.value == scope }.map { it.key }.toSet()
+    val definitions = context().allDefinitions().filter { it.value == scope }.map { it.key }.toSet()
     val instances = context().allInstances().filter { it.first in definitions }
     Assert.assertEquals("scope $scopeName must have $instanceCount instances", instanceCount, instances.size)
 }

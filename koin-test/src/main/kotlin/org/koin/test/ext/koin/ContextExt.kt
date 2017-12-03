@@ -6,17 +6,16 @@ import org.koin.core.bean.bind
 import org.koin.core.scope.Scope
 import kotlin.reflect.KClass
 
-
 /**
  * Return all definitions of Koin
  */
-fun KoinContext.AllDefinitions() = beanRegistry.definitions
+fun KoinContext.allDefinitions() = beanRegistry.definitions
 
 /**
  * return definition for given class
  * @param clazz - bean definition class
  */
-fun KoinContext.definition(clazz: KClass<*>): BeanDefinition<*>? = AllDefinitions().keys.firstOrNull() { it.clazz == clazz }
+fun KoinContext.definition(clazz: KClass<*>) = allDefinitions().keys.firstOrNull { it.clazz == clazz }
 
 /**
  * Return all contexts of Koin
