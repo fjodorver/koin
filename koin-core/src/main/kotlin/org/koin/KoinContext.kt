@@ -47,10 +47,9 @@ class KoinContext(val beanRegistry: BeanRegistry, val propertyResolver: Property
 
         resolutionStack.add(type)
 
-        val beanDefinition = if(name != null && name.isNotEmpty())
+        val beanDefinition = name?.let {
             beanRegistry.searchByName(name)
-        else
-            beanRegistry.searchAll(type)
+        } ?: beanRegistry.searchAll(type)
         val instance: T = instanceFactory[beanDefinition]
 
         val head = resolutionStack.pop()

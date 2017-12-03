@@ -37,7 +37,7 @@ class Context(val name: String = Scope.ROOT, val koinContext: KoinContext) {
      * @param name
      * @param isSingleton
      */
-    inline fun <reified T : Any> provide(name: String = "", isSingleton: Boolean = true, noinline definition: () -> T): BeanDefinition<T> {
+    inline fun <reified T : Any> provide(name: String? = null, isSingleton: Boolean = true, noinline definition: () -> T): BeanDefinition<T> {
         val beanDefinition = BeanDefinition(name, T::class, isSingleton, definition = definition)
         definitions += beanDefinition
         return beanDefinition
@@ -46,7 +46,7 @@ class Context(val name: String = Scope.ROOT, val koinContext: KoinContext) {
     /**
      * Provide a bean definition - as factory (recreate instance each time)
      */
-    inline fun <reified T : Any> provideFactory(name: String = "", noinline definition: () -> T): BeanDefinition<T> {
+    inline fun <reified T : Any> provideFactory(name: String? = null, noinline definition: () -> T): BeanDefinition<T> {
         val beanDefinition = BeanDefinition(name, T::class, false, definition = definition)
         definitions += beanDefinition
         return beanDefinition

@@ -19,7 +19,7 @@ import kotlin.reflect.KClass
  * @param definition - bean definition function
  */
 data class BeanDefinition<out T>(
-        val name: String = "",
+        val name: String? = null,
         val clazz: KClass<*>,
         val isSingleton: Boolean = true,
         var bindTypes: List<KClass<*>> = arrayListOf(),
