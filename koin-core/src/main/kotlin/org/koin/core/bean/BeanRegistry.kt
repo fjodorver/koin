@@ -25,18 +25,21 @@ class BeanRegistry {
     }
 
     /**
+     * Retrieve context scope for given bean definition
+     */
+    operator fun get(definition: BeanDefinition<*>) = definitions[definition]
+
+    /**
      * Add/Replace an existing bean
      *
      * @param def : Bean definition
      */
-    fun declare(def: BeanDefinition<*>, scope: Scope) {
-        definitions += Pair(def, scope)
+    operator fun set(definition: BeanDefinition<*>, scope: Scope) {
+        definitions += definition to scope
     }
 
-    /**
-     * Retrieve context scope for given bean definition
-     */
-    fun getScopeForDefinition(beanDefinition: BeanDefinition<*>) = definitions[beanDefinition]
+    operator fun contains(definition: BeanDefinition<*>) = definition in definitions
+
 
     /**
      * Retrieve context scope for given class

@@ -3,6 +3,7 @@ package org.koin.test.standalone
 import org.junit.Assert
 import org.junit.Test
 import org.koin.Koin
+import org.koin.core.bean.bind
 import org.koin.core.scope.Scope
 import org.koin.dsl.module.Module
 import org.koin.log.PrintLogger

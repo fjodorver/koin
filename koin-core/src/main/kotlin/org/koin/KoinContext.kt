@@ -27,25 +27,25 @@ class KoinContext(val beanRegistry: BeanRegistry, val propertyResolver: Property
     /**
      * Retrieve a bean instance
      */
-    inline fun <reified T> get(name: String = ""): T = if (name.isEmpty()) resolveByClass() else resolveByName(name)
+    inline fun <reified T: Any> get(name: String = ""): T = if (name.isEmpty()) resolveByClass() else resolveByName(name)
 
     /**
      * Resolve a dependency for its bean definition
      * @param name bean definition name
      */
-    inline fun <reified T> resolveByName(name: String): T = resolveInstance(T::class) { beanRegistry.searchByName(name) }
+    inline fun <reified T: Any> resolveByName(name: String): T = resolveInstance(T::class) { beanRegistry.searchByName(name) }
 
     /**
      * Resolve a dependency for its bean definition
      * byt Its infered type
      */
-    inline fun <reified T> resolveByClass(): T = resolveInstance(T::class) { beanRegistry.searchAll(T::class) }
+    inline fun <reified T: Any> resolveByClass(): T = resolveInstance(T::class) { beanRegistry.searchAll(T::class) }
 
 
     /**
      * Resolve a dependency for its bean definition
      */
-    fun <T> resolveInstance(clazz: KClass<*>, resolver: () -> BeanDefinition<*>): T {
+    fun <T: Any> resolveInstance(clazz: KClass<*>, resolver: () -> BeanDefinition<*>): T {
         logger.log("[Context] Resolve [${clazz.java.canonicalName}]")
 
         if (resolutionStack.contains(clazz)) {
@@ -62,7 +62,7 @@ class KoinContext(val beanRegistry: BeanRegistry, val propertyResolver: Property
 
         val beanDefinition: BeanDefinition<*> = resolver()
 
-        val instance = instanceFactory.retrieveInstance<T>(beanDefinition)
+        val instance: T = instanceFactory[beanDefinition]
 
         val head = resolutionStack.pop()
         if (head != clazz) {
@@ -80,7 +80,7 @@ class KoinContext(val beanRegistry: BeanRegistry, val propertyResolver: Property
         logger.log("(DRY RUN)")
         beanRegistry.definitions.keys.forEach { def ->
             Koin.logger.log("Testing $def ...")
-            instanceFactory.retrieveInstance<Any>(def)
+            instanceFactory[def]
         }
     }
 

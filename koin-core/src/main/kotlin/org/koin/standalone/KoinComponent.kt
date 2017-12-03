@@ -11,7 +11,7 @@ interface KoinComponent
  * inject lazily given dependency for KoinComponent
  * @param name - bean name / optional
  */
-inline fun <reified T> KoinComponent.inject(name: String = "") = kotlin.lazy { (StandAloneContext.koinContext as KoinContext).get<T>(name) }
+inline fun <reified T: Any> KoinComponent.inject(name: String = "") = kotlin.lazy { (StandAloneContext.koinContext as KoinContext).get<T>(name) }
 
 /**
  * inject lazily given property for KoinComponent
@@ -40,7 +40,7 @@ private fun context() = (StandAloneContext.koinContext as KoinContext)
  * Retrieve given dependency for KoinComponent
  * @param name - bean name / optional
  */
-inline fun <reified T> KoinComponent.get(name: String = "") = (StandAloneContext.koinContext as KoinContext).get<T>(name)
+inline fun <reified T: Any> KoinComponent.get(name: String = "") = (StandAloneContext.koinContext as KoinContext).get<T>(name)
 
 /**
  * Retrieve given property for KoinComponent

@@ -82,7 +82,7 @@ class Koin {
         // Add definitions
         context.definitions.forEach { definition ->
             logger.log("[init] declare : $definition")
-            beanRegistry.declare(definition, scope)
+            beanRegistry[definition] = scope
         }
 
         // Check sub contexts

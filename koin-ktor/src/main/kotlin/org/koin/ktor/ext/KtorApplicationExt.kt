@@ -9,7 +9,7 @@ import org.koin.standalone.StandAloneContext
  * inject lazily given dependency
  * @param name - bean name / optional
  */
-inline fun <reified T> Application.inject(name: String = "") = lazy { (StandAloneContext.koinContext as KoinContext).get<T>(name) }
+inline fun <reified T: Any> Application.inject(name: String = "") = lazy { (StandAloneContext.koinContext as KoinContext).get<T>(name) }
 
 /**
  * lazy inject given property
@@ -32,7 +32,7 @@ inline fun <reified T> Application.property(key: String, defaultValue: T) = lazy
  * Retrieve given dependency for KoinComponent
  * @param name - bean name / optional
  */
-inline fun <reified T> Application.get(name: String = "") = (StandAloneContext.koinContext as KoinContext).get<T>(name)
+inline fun <reified T: Any> Application.get(name: String = "") = (StandAloneContext.koinContext as KoinContext).get<T>(name)
 
 /**
  * Retrieve given property for KoinComponent

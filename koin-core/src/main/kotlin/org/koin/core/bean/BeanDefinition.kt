@@ -18,22 +18,18 @@ import kotlin.reflect.KClass
  * @param bindTypes - list of assignable types
  * @param definition - bean definition function
  */
-data class BeanDefinition<out T>(val name: String = "", val clazz: KClass<*>, val isSingleton: Boolean = true, var bindTypes: List<KClass<*>> = arrayListOf(), val definition: () -> T) {
+data class BeanDefinition<out T>(
+        val name: String = "",
+        val clazz: KClass<*>,
+        val isSingleton: Boolean = true,
+        var bindTypes: List<KClass<*>> = arrayListOf(),
+        val definition: () -> T
+)
 
-    /**
-     * Add a compatible type to current bounded definition
-     */
-    infix fun bind(clazz: KClass<*>): BeanDefinition<*> {
-        bindTypes += clazz
-        return this
-    }
-
-    /**
-     * Bean definition is not a singleton, but a factory
-     */
-    fun isNotASingleton() = !isSingleton
-
-    private fun bindTypes(): String = "(" + bindTypes.map { it.java.canonicalName }.joinToString() + ")"
-
-    override fun toString() = "Bean[name='$name',class=${clazz.java.canonicalName},singleton=$isSingleton,binds~${bindTypes()}]"
+/**
+ * Add a compatible type to current bounded definition
+ */
+infix fun <T> BeanDefinition<T>.bind(clazz: KClass<*>): BeanDefinition<*> {
+    bindTypes += clazz
+    return this
 }

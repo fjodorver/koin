@@ -2,6 +2,7 @@ package org.koin.test.core
 
 import org.junit.Assert
 import org.junit.Test
+import org.koin.core.bean.bind
 import org.koin.core.scope.Scope
 import org.koin.dsl.module.Module
 import org.koin.standalone.StandAloneContext.startKoin
