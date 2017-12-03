@@ -18,7 +18,7 @@ private fun <T> BeanDefinition<T>.createInstance() = try {
  * Instance factory - handle objects creation against BeanRegistry
  * @author - Arnaud GIULIANI
  */
-class InstanceFactory(val beanRegistry: BeanRegistry) {
+class InstanceFactory(private val beanRegistry: BeanRegistry) {
 
     val instances = ConcurrentHashMap<BeanDefinition<*>, Any>()
 
